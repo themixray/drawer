@@ -6,7 +6,7 @@ Draw symbols on console like pygame
 from console import console
 from drawer import canvas
 
-console.set_title("название")
+console.set_title("title")
 console.run_moveable_thread()
 win = canvas(64,32)
 
