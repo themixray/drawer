@@ -1,10 +1,7 @@
 from console import console
 import os, sys
 
-font_size = [console.get_size()[0]/os.get_terminal_size().columns,
-             console.get_size()[1]/os.get_terminal_size().lines]
-font_size[0] = 8.1
-font_size[1] = 15.5
+font_size = [8.2,15.5]
 
 class canvas:
     def __init__(self,width,height):
@@ -16,7 +13,7 @@ class canvas:
     def clear(self):
         # os.system("cls")
         print("\033[H\033[J",end="")
-    def fill(self,symbol,update=True):
+    def fill(self,symbol=" ",update=True):
         self.pixels = [[symbol for i in range(self.width)] for i in range(self.height)]
         self.changed = True
         if update: self.update()
@@ -34,7 +31,15 @@ class canvas:
             self.pixels[y][x] = symbol
             self.changed = True
             if update: self.update()
+    def write(self,x,y,text,update=True):
+        self.changed = True
+        for n,s in enumerate(text):
+            self.set(x+n,y,s,False)
+        if update: self.update()
     def get(self,x,y):
         return self.pixels[y][x]
     def all(self):
         return self.pixels
+    def get_mouse_position(self):
+        return (console.get_mouse_position()[0]/self.sp[0]*self.width,
+                (console.get_mouse_position()[1]/(self.sp[1]-font_size[1]*4)*self.height))

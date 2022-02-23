@@ -3,12 +3,13 @@ import threading
 import win32gui
 import win32api
 import atexit
+import os
 
 class console:
     def __init__(self):
         self._is_enabled = False
         self.hwnd = win32console.GetConsoleWindow()
-        atexit.register(lambda:console.set_input(True))
+        atexit.register(lambda:self.set_input(True))
     def _mouse_thread(self):
         while True:
             if self.get_mouse_position()[1] > 30:
@@ -39,7 +40,8 @@ class console:
                self.get_mouse_position()[0] <= self.get_size()[0] and \
                self.get_mouse_position()[1] <= self.get_size()[1]
     def get_size(self):
-        return win32gui.GetWindowRect(self.hwnd)[2:]
+        return (win32gui.GetWindowRect(self.hwnd)[2]-7,
+                win32gui.GetWindowRect(self.hwnd)[3]-30)
     def set_size(self,w,h):
         win32gui.MoveWindow(self.hwnd,*self.get_position(),int(w),int(h),True)
     def set_position(self,x,y):
