@@ -3,7 +3,7 @@ Draw symbols on console like pygame
 
 ## What can I do with this library?
 For example
-1. Buttons in the console (`console.run_moveable_thread()` and track mouse clicks)
+1. Buttons in the console (`console.run_moveable_thread()` and track mouse clicks [(example)](https://github.com/themixray/drawer/blob/main/paint.py))
 2. Simple game
 3. and more:)
 
