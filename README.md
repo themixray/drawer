@@ -1,6 +1,12 @@
 # drawer
 Draw symbols on console like pygame
 
+## What can I do with this library?
+For example
+1. Buttons in the console (`console.run_moveable_thread()` and track mouse clicks)
+2. Simple game
+3. and more:)
+
 ## Example
 ```py
 from console import console
