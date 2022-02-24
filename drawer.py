@@ -1,3 +1,4 @@
+from colored import fg,bg,attr
 from console import console
 import os, sys
 
@@ -43,3 +44,6 @@ class canvas:
     def get_mouse_position(self):
         return (console.get_mouse_position()[0]/self.sp[0]*self.width,
                 (console.get_mouse_position()[1]/(self.sp[1]-font_size[1]*4)*self.height))
+
+def color_symbol(color):
+    return fg(color)+bg(color)+"#"+attr('reset')

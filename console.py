@@ -8,6 +8,7 @@ import os
 class console:
     def __init__(self):
         self._is_enabled = False
+        self._last_pos = (0,0)
         self.hwnd = win32console.GetConsoleWindow()
         atexit.register(lambda:self.set_input(True))
     def _mouse_thread(self):
@@ -18,12 +19,22 @@ class console:
             else:
                 if not self.is_input():
                     self._set_input(True)
+    def _focus_thread(self):
+        while True:
+            if win32gui.GetForegroundWindow() != self.hwnd:
+                win32gui.SetForegroundWindow(self.hwnd)
+    def run_focus_thread(self):
+        threading.Thread(target=self._focus_thread,daemon=1).start()
     def run_moveable_thread(self):
         threading.Thread(target=self._mouse_thread,daemon=1).start()
     def get_position(self):
         return win32gui.GetWindowRect(self.hwnd)[:2]
     def get_mouse_position(self):
-        pos = win32gui.GetCursorPos()
+        try:
+            pos = win32gui.GetCursorPos()
+            self._last_pos = pos
+        except:
+            pos = self._last_pos
         return (pos[0]-self.get_position()[0]-7,
                 pos[1]-self.get_position()[1]-30)
     def _set_input(self,value):
@@ -33,11 +44,14 @@ class console:
         win32gui.EnableWindow(self.hwnd,value)
     def is_input(self):
         return win32gui.IsWindowEnabled(self.hwnd)
+    def set_focus(self):
+        win32gui.SetForegroundWindow(self.hwnd)
+        win32gui.SetFocus(self.hwnd)
     def is_focus(self):
         return win32gui.GetForegroundWindow() == self.hwnd and \
                self.get_mouse_position()[1] >= 30 and \
                self.get_mouse_position()[0] > 0 and \
-               self.get_mouse_position()[0] <= self.get_size()[0] and \
+               self.get_mouse_position()[0] <= self.get_size()[0]-7 and \
                self.get_mouse_position()[1] <= self.get_size()[1]
     def get_size(self):
         return (win32gui.GetWindowRect(self.hwnd)[2]-7,
